@@ -18,6 +18,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Container from "@mui/material/Container";
+import Link from "next/link";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -95,8 +96,18 @@ export default function AppHeader() {
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem>
+        <Link
+          href={"/profile"}
+          style={{
+            color: "unset",
+            textDecoration: "unset",
+          }}
+        >
+          Profile
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
 
@@ -162,15 +173,6 @@ export default function AppHeader() {
       >
         <Container>
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
             <Typography
               variant="h6"
               noWrap
@@ -195,10 +197,15 @@ export default function AppHeader() {
                 alignItems: "center",
                 gap: "20px",
                 cursor: "pointer",
+
+                "> a": {
+                  color: "unset",
+                  textDecoration: "unset",
+                },
               }}
             >
-              <span>Playlist</span>
-              <span>Likes</span>
+              <Link href={"/playlist"}>Playlist</Link>
+              <Link href={"/like"}>Likes</Link>
               <span>Upload</span>
               <Avatar onClick={handleProfileMenuOpen}>HL</Avatar>
             </Box>
