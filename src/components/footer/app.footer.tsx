@@ -10,8 +10,6 @@ const AppFooter = () => {
 
   if (!hasMounted) return <></>;
 
-  console.log("checkbackend :" + process.env.NEXT_PUBLIC_BACKEND_URL);
-
   return (
     <AppBar
       position="fixed"
