@@ -41,6 +41,7 @@ const MainSlider = (props: IProps) => {
         variant="outlined"
         onClick={props.onClick}
         sx={{
+          left: 0,
           position: "absolute",
           top: "25%",
           zIndex: 2,
@@ -68,12 +69,14 @@ const MainSlider = (props: IProps) => {
         margin: "0 50px",
 
         ".track": {
+          boxSizing: "border-box",
           padding: "0 10px",
-          display: "grid",
-          gridTemplateColumns: "auto auto auto ",
+          display: "flex",
+          justifyContent: "space-around",
           gap: "10px",
           img: {
             height: "150px",
+            width: "100%",
           },
         },
         h3: {
