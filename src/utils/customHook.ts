@@ -30,7 +30,7 @@ export const useWavesurfer = (
     containerRef: React.RefObject<HTMLDivElement>,
     options: Omit<WaveSurferOptions, "container">
 ) => {
-    const [waveserfer, setWaveserfer] = useState<any>(null);
+    const [waveserfer, setWaveserfer] = useState<WaveSurfer | null>(null);
 
     useEffect(() => {
         if (!containerRef.current) {
