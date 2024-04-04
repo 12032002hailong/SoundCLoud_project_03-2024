@@ -10,6 +10,7 @@ import React, {
   useState,
 } from "react";
 import { WaveSurferOptions } from "wavesurfer.js";
+import "./wave.scss";
 
 const WaveTrack = () => {
   const searchParams = useSearchParams();
@@ -20,7 +21,7 @@ const WaveTrack = () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d")!;
 
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 1.35);
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 1);
     gradient.addColorStop(0, "#656666"); // Top color
     gradient.addColorStop((canvas.height * 0.7) / canvas.height, "#656666"); // Top color
     gradient.addColorStop((canvas.height * 0.7 + 1) / canvas.height, "#ffffff"); // White line
@@ -54,7 +55,6 @@ const WaveTrack = () => {
     progressGradient.addColorStop(1, "#F6B094");
 
     return {
-      height: 50,
       waveColor: gradient,
       progressColor: progressGradient,
       barWidth: 1.5,
@@ -65,13 +65,31 @@ const WaveTrack = () => {
   const wavesurfer = useWavesurfer(containerRef, optionsMemo);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secondsRemainder = Math.round(seconds) % 60;
+    const paddedSeconds = `0${secondsRemainder}`.slice(-2);
+    return `${minutes}:${paddedSeconds}`;
+  };
+
   useEffect(() => {
     if (!wavesurfer) return;
     setIsPlaying(false);
 
+    const timeEl = document.querySelector("#time")!;
+    const durationEl = document.querySelector("#duration")!;
+
     const subscriptions = [
       wavesurfer.on("play", () => setIsPlaying(true)),
       wavesurfer.on("pause", () => setIsPlaying(false)),
+      wavesurfer.on(
+        "decode",
+        (duration) => (durationEl.textContent = formatTime(duration))
+      ),
+      wavesurfer.on(
+        "timeupdate",
+        (currentTime) => (timeEl.textContent = formatTime(currentTime))
+      ),
     ];
     return () => {
       subscriptions.forEach((unsub) => unsub());
@@ -86,12 +104,16 @@ const WaveTrack = () => {
   }, [wavesurfer]);
 
   return (
-    <Container>
-      <div ref={containerRef}>WaveTrack</div>
+    <>
+      <div ref={containerRef} className="wave-form-container">
+        WaveTrack
+        <div id="time">0:00</div>
+        <div id="duration">0:00</div>
+      </div>
       <Button onClick={onPlayClick}>
         {wavesurfer?.isPlaying() === true ? "Pause" : "Play"}
       </Button>
-    </Container>
+    </>
   );
 };
 
