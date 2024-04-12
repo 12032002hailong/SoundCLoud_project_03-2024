@@ -8,7 +8,6 @@ import { getServerSession } from "next-auth";
 export default async function HomePage() {
   //get session
   const session = await getServerSession(authOptions);
-  console.log(">>>check session", session);
 
   const chills = await sendRequest<IBackendRes<ITrackTop[]>>({
     url: "http://localhost:8000/api/v1/tracks/top",
