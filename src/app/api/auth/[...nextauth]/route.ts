@@ -17,13 +17,12 @@ export const authOptions: AuthOptions = {
         jwt({ token, trigger, user, account, profile }) {
             if (trigger === 'signIn' && account?.provider === 'github') {
                 //todo
-                token.address = 'hailong'
             }
             return token;
         },
         session({ session, token, user }) {
-            //@ts-ignore
-            session.address = token.address
+
+            session.user.address = "token.address";
             return session;
         }
     }
