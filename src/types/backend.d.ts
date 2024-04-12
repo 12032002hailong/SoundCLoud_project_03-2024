@@ -2,8 +2,6 @@ export { };
 // https://bobbyhadz.com/blog/typescript-make-types-global#declare-global-types-in-typescript
 
 declare global {
-
-
     interface ITrackTop {
         "_id": string,
         "title": string,
@@ -51,6 +49,10 @@ declare global {
             total: number;
         },
         result: T[]
+    }
+
+    interface IAuth<T> {
+
     }
 
 }
