@@ -35,7 +35,7 @@ export const authOptions: AuthOptions = {
                 if (res && res.data) {
                     return res.data as any;
                 } else {
-                    return null;
+                    throw new Error(res?.message as string);
                 }
 
                 const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
@@ -90,6 +90,8 @@ export const authOptions: AuthOptions = {
             }
             return session;
         }
+    }, pages: {
+        signIn: '/auth/signin'
     }
 };
 
