@@ -20,6 +20,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const AuthSignIn = (props: any) => {
   const router = useRouter();
@@ -33,6 +35,9 @@ const AuthSignIn = (props: any) => {
 
   const [errorUsername, setErrorUsername] = useState<string>("");
   const [errorPassword, setErrorPassword] = useState<string>("");
+
+  const [openMessage, setOpenMessage] = useState<boolean>(false);
+  const [resMessage, setResMessage] = useState<string>("");
 
   const handleSubmit = async () => {
     setIsErrorUsername(false);
@@ -58,7 +63,8 @@ const AuthSignIn = (props: any) => {
     if (!res?.error) {
       router.push("/");
     } else {
-      alert(res.error);
+      setOpenMessage(true);
+      setResMessage(res.error);
     }
   };
 
@@ -124,6 +130,11 @@ const AuthSignIn = (props: any) => {
             />
             <TextField
               onChange={(event) => setPassword(event.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                }
+              }}
               variant="outlined"
               margin="normal"
               required
@@ -192,6 +203,18 @@ const AuthSignIn = (props: any) => {
           </div>
         </Grid>
       </Grid>
+      <Snackbar
+        open={openMessage}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setOpenMessage(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {resMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
