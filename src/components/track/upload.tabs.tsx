@@ -4,6 +4,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Step1 from "./steps/step1";
+import Step2 from "./steps/step2";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -21,11 +23,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -85,19 +83,15 @@ const UploadTabs = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Tracks" {...a11yProps(0)} />
+          <Tab label="Basic information" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Item One
+        <Step1 />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Item Two
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        Item Three
+        <Step2 />
       </CustomTabPanel>
     </Box>
   );
