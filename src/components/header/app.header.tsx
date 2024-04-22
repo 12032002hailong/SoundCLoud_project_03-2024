@@ -141,15 +141,29 @@ export default function AppHeader() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem
+        sx={{
+          "> a": {
+            color: "unset",
+            textDecoration: "unset",
+          },
+        }}
+      >
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <Link href={"/playlist"}>Playlist</Link>{" "}
       </MenuItem>
-      <MenuItem>
+      <MenuItem
+        sx={{
+          "> a": {
+            color: "unset",
+            textDecoration: "unset",
+          },
+        }}
+      >
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -159,9 +173,16 @@ export default function AppHeader() {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <Link href={"/like"}>Likes</Link>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem
+        sx={{
+          "> a": {
+            color: "unset",
+            textDecoration: "unset",
+          },
+        }}
+      >
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -169,9 +190,9 @@ export default function AppHeader() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          {/* <AccountCircle /> */}
         </IconButton>
-        <p>Profile</p>
+        <Link href={"/track/upload"}>Upload</Link>
       </MenuItem>
     </Menu>
   );
