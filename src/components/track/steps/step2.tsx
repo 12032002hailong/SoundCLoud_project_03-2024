@@ -11,6 +11,13 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Grid, MenuItem, TextField } from "@mui/material";
 
+interface IProps {
+  trackUpload: {
+    fileName: string;
+    percent: number;
+  };
+}
+
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
 ) {
@@ -28,23 +35,10 @@ function LinearProgressWithLabel(
   );
 }
 
-function LinearWithValueLabel() {
-  const [progress, setProgress] = React.useState(10);
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress >= 100 ? 10 : prevProgress + 10
-      );
-    }, 800);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
+function LinearWithValueLabel(props: IProps) {
   return (
     <Box sx={{ width: "100%" }}>
-      <LinearProgressWithLabel value={progress} />
+      <LinearProgressWithLabel value={props.trackUpload.percent} />
     </Box>
   );
 }
@@ -74,7 +68,9 @@ function InputFileUpload() {
   );
 }
 
-const Step2 = () => {
+const Step2 = (props: IProps) => {
+  const { trackUpload } = props;
+  console.log(">>>check props", trackUpload);
   const category = [
     { value: "CHILL", label: "CHILL" },
     { value: "WORKOUT", label: "WORKOUT" },
@@ -84,8 +80,8 @@ const Step2 = () => {
   return (
     <div>
       <div>
-        <div>Your uploading track:</div>
-        <LinearWithValueLabel />
+        <h2>{trackUpload.fileName}</h2>
+        <LinearWithValueLabel trackUpload={trackUpload} />
       </div>
       <Grid container spacing={2} mt={5}>
         <Grid
