@@ -13,6 +13,7 @@ import { Grid, MenuItem, TextField } from "@mui/material";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { sendRequest } from "@/utils/api";
+import { useToast } from "@/utils";
 
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
@@ -54,6 +55,7 @@ const VisuallyHiddenInput = styled("input")({
 function InputFileUpload(props: any) {
   const { setInfo, info } = props;
   const { data: session } = useSession();
+  const toast = useToast();
 
   const handleUpload = async (image: any) => {
     const formData = new FormData();
@@ -74,7 +76,8 @@ function InputFileUpload(props: any) {
         imgUrl: res.data.data.fileName,
       });
     } catch (error) {
-      console.log(error);
+      //@ts-ignore
+      toast.error(error?.response?.data?.message);
     }
   };
   return (
@@ -101,6 +104,7 @@ interface IProps {
     percent: number;
     uploadedTrackName: string;
   };
+  setValue: (v: number) => void;
 }
 
 interface INewTrack {
@@ -114,7 +118,7 @@ interface INewTrack {
 const Step2 = (props: IProps) => {
   const { data: session } = useSession();
 
-  const { trackUpload } = props;
+  const { trackUpload, setValue } = props;
   const [info, setInfo] = React.useState<INewTrack>({
     title: "",
     description: "",
@@ -122,6 +126,7 @@ const Step2 = (props: IProps) => {
     imgUrl: "",
     category: "",
   });
+  const toast = useToast();
 
   React.useEffect(() => {
     if (trackUpload && trackUpload.uploadedTrackName) {
@@ -153,16 +158,17 @@ const Step2 = (props: IProps) => {
       },
     });
     if (res && res.data) {
-      alert("upload success");
+      setValue(0);
+      toast.success("Create a new track success");
     } else {
-      alert("upload fail");
+      toast.error(res.message + "");
     }
   };
   return (
     <div>
       <div>
         <h2>{trackUpload.fileName}</h2>
-        <LinearWithValueLabel trackUpload={trackUpload} />
+        <LinearWithValueLabel trackUpload={trackUpload} setValue={setValue} />
       </div>
       <Grid container spacing={2} mt={5}>
         <Grid
