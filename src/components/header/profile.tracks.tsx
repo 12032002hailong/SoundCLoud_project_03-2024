@@ -15,9 +15,13 @@ import {
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import { useTrackContext } from "@/lib/track.wrapper";
+import PauseIcon from "@mui/icons-material/Pause";
+
 const ProfileTracks = (props: any) => {
   const { data } = props;
   const theme = useTheme();
+  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -26,6 +30,12 @@ const ProfileTracks = (props: any) => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
+  console.log(
+    "data, currentTrack, isPlaying ",
+    data,
+    currentTrack,
+    currentTrack.isPlaying
+  );
   return (
     <Grid
       container
@@ -64,9 +74,39 @@ const ProfileTracks = (props: any) => {
                   <SkipPreviousIcon />
                 )}
               </IconButton>
-              <IconButton aria-label="play/pause">
+
+              <IconButton
+                aria-label="play/pause"
+                onClick={(e) => setCurrentTrack({ ...data, isPlaying: true })}
+              >
                 <PlayArrowIcon sx={{ height: 38, width: 38 }} />
               </IconButton>
+
+              {data._id !== currentTrack._id ||
+                (data._id === currentTrack._id &&
+                  currentTrack.isPlaying === false && (
+                    <IconButton
+                      aria-label="play/pause"
+                      onClick={(e) =>
+                        setCurrentTrack({ ...data, isPlaying: true })
+                      }
+                    >
+                      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+                    </IconButton>
+                  ))}
+
+              {data._id === currentTrack._id &&
+                currentTrack.isPlaying === true && (
+                  <IconButton
+                    aria-label="play/pause"
+                    onClick={(e) =>
+                      setCurrentTrack({ ...data, isPlaying: false })
+                    }
+                  >
+                    <PauseIcon sx={{ height: 38, width: 38 }} />
+                  </IconButton>
+                )}
+
               <IconButton aria-label="next">
                 {theme.direction === "rtl" ? (
                   <SkipPreviousIcon />

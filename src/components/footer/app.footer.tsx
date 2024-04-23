@@ -1,14 +1,23 @@
 "use client";
-import React from "react";
+import React, { useContext, useRef } from "react";
 import { AppBar, Container } from "@mui/material";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { useHasMounted } from "@/utils/customHook";
+import {  useTrackContext } from "@/lib/track.wrapper";
 
 const AppFooter = () => {
   const hasMounted = useHasMounted();
-
+  const playerRef = useRef(null);
   if (!hasMounted) return <></>;
+  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
+  if (currentTrack?.isPlaying) {
+    //@ts-ignore
+    playerRef?.current?.audio?.current?.play();
+  } else {
+    //@ts-ignore
+    playerRef?.current?.audio?.current?.pause();
+  }
   return (
     <div style={{ marginTop: "50px" }}>
       <AppBar
@@ -30,14 +39,20 @@ const AppFooter = () => {
           }}
         >
           <AudioPlayer
+            ref={playerRef}
             layout="horizontal-reverse"
-            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/CHILL.mp3`}
+            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/${currentTrack.trackUrl}`}
             volume={0.5}
             style={{
               boxShadow: "unset",
               background: "#f2f2f2",
             }}
-            // Try other props!
+            onPlay={() => {
+              setCurrentTrack({ ...currentTrack, isPlaying: true });
+            }}
+            onPause={() => {
+              setCurrentTrack({ ...currentTrack, isPlaying: false });
+            }}
           />
           <div
             style={{
