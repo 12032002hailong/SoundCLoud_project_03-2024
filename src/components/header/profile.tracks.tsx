@@ -26,7 +26,6 @@ const ProfileTracks = (props: any) => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
-  console.log(data);
   return (
     <Grid
       container
