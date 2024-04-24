@@ -30,12 +30,7 @@ const ProfileTracks = (props: any) => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
-  console.log(
-    "data, currentTrack, isPlaying ",
-    data,
-    currentTrack,
-    currentTrack.isPlaying
-  );
+
   return (
     <Grid
       container
@@ -75,25 +70,18 @@ const ProfileTracks = (props: any) => {
                 )}
               </IconButton>
 
-              <IconButton
-                aria-label="play/pause"
-                onClick={(e) => setCurrentTrack({ ...data, isPlaying: true })}
-              >
-                <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-              </IconButton>
-
-              {data._id !== currentTrack._id ||
-                (data._id === currentTrack._id &&
-                  currentTrack.isPlaying === false && (
-                    <IconButton
-                      aria-label="play/pause"
-                      onClick={(e) =>
-                        setCurrentTrack({ ...data, isPlaying: true })
-                      }
-                    >
-                      <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                    </IconButton>
-                  ))}
+              {(data._id !== currentTrack._id ||
+                data._id === currentTrack._id &&
+                currentTrack.isPlaying === false) && (
+                  <IconButton
+                    aria-label="play/pause"
+                    onClick={(e) =>
+                      setCurrentTrack({ ...data, isPlaying: true })
+                    }
+                  >
+                    <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+                  </IconButton>
+                )}
 
               {data._id === currentTrack._id &&
                 currentTrack.isPlaying === true && (
