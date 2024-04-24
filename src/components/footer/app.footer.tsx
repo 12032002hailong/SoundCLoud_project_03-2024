@@ -1,25 +1,34 @@
 "use client";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { AppBar, Container } from "@mui/material";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { useHasMounted } from "@/utils/customHook";
-import {  useTrackContext } from "@/lib/track.wrapper";
+import { useTrackContext } from "@/lib/track.wrapper";
 
 const AppFooter = () => {
+  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
   const hasMounted = useHasMounted();
   const playerRef = useRef(null);
+
+  useEffect(() => {
+    if (currentTrack?.isPlaying === false) {
+      //@ts-ignore
+      playerRef?.current?.audio?.current?.pause();
+    }
+    if (currentTrack?.isPlaying === true) {
+      //@ts-ignore
+      playerRef?.current?.audio?.current?.play();
+    }
+  }, [currentTrack]);
+
   if (!hasMounted) return <></>;
-  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
-  if (currentTrack?.isPlaying) {
-    //@ts-ignore
-    playerRef?.current?.audio?.current?.play();
-  } else {
-    //@ts-ignore
-    playerRef?.current?.audio?.current?.pause();
-  }
   return (
-    <div style={{ marginTop: "50px" }}>
+    <div
+      style={{
+        marginTop: "50px",
+      }}
+    >
       <AppBar
         position="fixed"
         color="primary"
@@ -33,6 +42,8 @@ const AppFooter = () => {
           sx={{
             display: "flex",
             gap: 10,
+            justifyContent: "space-between",
+            width: "100%",
             ".gap_main": {
               gap: "30px",
             },
@@ -60,11 +71,11 @@ const AppFooter = () => {
               flexDirection: "column",
               alignItems: "start",
               justifyContent: "center",
-              minWidth: 100,
+              minWidth: 200,
             }}
           >
-            <div style={{ color: "#ccc" }}>WangJu</div>
-            <div style={{ color: "black" }}>Music name</div>
+            <div style={{ color: "#ccc" }}>{currentTrack.description}</div>
+            <div style={{ color: "black" }}>{currentTrack.title}</div>
           </div>
         </Container>
       </AppBar>

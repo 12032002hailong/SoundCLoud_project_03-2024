@@ -13,14 +13,22 @@ import { WaveSurferOptions } from "wavesurfer.js";
 import "./wave.scss";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { sendRequest } from "@/utils/api";
+import { useTrackContext } from "@/lib/track.wrapper";
 
-const WaveTrack = () => {
+interface IProps {
+  track: ITrackTop | null;
+}
+const WaveTrack = (props: IProps) => {
+  const { track } = props;
   const searchParams = useSearchParams();
   const fileName = searchParams.get("audio");
+  const id = searchParams.get("id");
   const containerRef = useRef<HTMLDivElement>(null);
   const hoverRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState<string>("0:00");
   const [duration, setDuration] = useState<string>("0:00");
+  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
 
   const optionsMemo = useMemo((): Omit<WaveSurferOptions, "container"> => {
     let gradient;
@@ -84,6 +92,8 @@ const WaveTrack = () => {
   const wavesurfer = useWavesurfer(containerRef, optionsMemo);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const [trackInfo, setTrackInfo] = useState<ITrackTop | null>(null);
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secondsRemainder = Math.round(seconds) % 60;
@@ -97,7 +107,10 @@ const WaveTrack = () => {
 
     const hover = hoverRef.current!;
     const waveform = containerRef.current!;
-    waveform.addEventListener('pointermove', (e) => (hover.style.width = `${e.offsetX}px`))
+    waveform.addEventListener(
+      "pointermove",
+      (e) => (hover.style.width = `${e.offsetX}px`)
+    );
 
     waveform.addEventListener(
       "pointermove",
@@ -126,35 +139,60 @@ const WaveTrack = () => {
     }
   }, [wavesurfer]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await sendRequest<IBackendRes<ITrackTop>>({
+        url: `http://localhost:8000/api/v1/tracks/${id}`,
+        method: "GET",
+      });
+      if (res && res.data) {
+        setTrackInfo(res.data);
+      }
+    };
+    fetchData();
+  }, [id]);
+
   const arrComments = [
     {
       id: 1,
       avatar: "http://localhost:8000/images/chill1.png",
       moment: 10,
       user: "username 1",
-      content: "just a comment1"
+      content: "just a comment1",
     },
     {
       id: 2,
       avatar: "http://localhost:8000/images/chill1.png",
       moment: 30,
       user: "username 2",
-      content: "just a comment3"
+      content: "just a comment3",
     },
     {
       id: 3,
       avatar: "http://localhost:8000/images/chill1.png",
       moment: 50,
       user: "username 3",
-      content: "just a comment3"
+      content: "just a comment3",
     },
-  ]
+  ];
 
   const calLeft = (moment: number) => {
     const hardCodeDuration = 199;
     const percent = (moment / hardCodeDuration) * 100;
-    return `${percent}%`
-  }
+    return `${percent}%`;
+  };
+
+  useEffect(() => {
+    if (wavesurfer && currentTrack.isPlaying) {
+      wavesurfer.pause();
+    }
+  }, [currentTrack]);
+
+  useEffect(() => {
+    if (track?._id && !currentTrack?._id) {
+      setCurrentTrack({ ...track, isPlaying: false });
+    }
+  }, [track]);
 
   return (
     <div style={{ marginTop: 20 }}>
@@ -185,7 +223,12 @@ const WaveTrack = () => {
             }}
           >
             <div
-              onClick={onPlayClick}
+              onClick={() => {
+                onPlayClick();
+                if (track && wavesurfer) {
+                  setCurrentTrack({ ...currentTrack, isPlaying: false });
+                }
+              }}
               style={{
                 borderRadius: "50%",
                 background: "#f50",
@@ -213,7 +256,7 @@ const WaveTrack = () => {
                   color: "white",
                 }}
               >
-                Hai Long
+                {track?.title}
               </div>
               <div
                 style={{
@@ -225,7 +268,7 @@ const WaveTrack = () => {
                   color: "white",
                 }}
               >
-                wang
+                {track?.description}
               </div>
             </div>
           </div>
@@ -234,55 +277,61 @@ const WaveTrack = () => {
             <div className="time">{time}</div>
             <div className="duration">{duration}</div>
             <div ref={hoverRef} className="hover-wave"></div>
-            <div className="overlay"
+            <div
+              className="overlay"
               style={{
-                position: 'absolute',
-                height: '30px',
-                width: '100%',
-                bottom: '0',
-                backdropFilter: 'brightness(0.5)'
+                position: "absolute",
+                height: "30px",
+                width: "100%",
+                bottom: "0",
+                backdropFilter: "brightness(0.5)",
               }}
             ></div>
-            <div className="comments"
-              style={{ position: 'relative' }}
-            >
-
-              {arrComments.map(item => {
+            <div className="comments" style={{ position: "relative" }}>
+              {arrComments.map((item) => {
                 return (
-                  <Tooltip title={item.content} arrow color="yellow">
+                  <Tooltip title={item.content} arrow key={item.id}>
                     <img
                       onPointerMove={(e) => {
                         const hover = hoverRef.current!;
-                        hover.style.width = calLeft(item.moment)
-
+                        hover.style.width = calLeft(item.moment);
                       }}
                       key={item.id}
-                      src={`http://localhost:8000/images/chill1.png`} alt=""
-                      style={{ height: 20, width: 20, position: 'absolute', top: '71px', zIndex: 20, left: calLeft(item.moment) }}
+                      src={`http://localhost:8000/images/chill1.png`}
+                      alt=""
+                      style={{
+                        height: 20,
+                        width: 20,
+                        position: "absolute",
+                        top: "71px",
+                        zIndex: 20,
+                        left: calLeft(item.moment),
+                      }}
                     />
                   </Tooltip>
-                )
+                );
               })}
             </div>
           </div>
         </div>
-        <div className="right"
+        <div
+          className="right"
           style={{
-            width: '25%',
-            gap: '10px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "25%",
+            gap: "10px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <div style={
-            {
-              background: '#ccc',
-              height: '250px',
-              maxWidth: '250px',
-              width: '100%'
-            }
-          }></div>
+          <div
+            style={{
+              background: "#ccc",
+              height: "250px",
+              maxWidth: "250px",
+              width: "100%",
+            }}
+          ></div>
         </div>
       </div>
     </div>
