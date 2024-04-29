@@ -18,9 +18,10 @@ import { useTrackContext } from "@/lib/track.wrapper";
 
 interface IProps {
   track: ITrackTop | null;
+  comments: ITrackComment[];
 }
 const WaveTrack = (props: IProps) => {
-  const { track } = props;
+  const { track, comments } = props;
   const searchParams = useSearchParams();
   const fileName = searchParams.get("audio");
   const id = searchParams.get("id");
@@ -288,15 +289,15 @@ const WaveTrack = (props: IProps) => {
               }}
             ></div>
             <div className="comments" style={{ position: "relative" }}>
-              {arrComments.map((item) => {
+              {comments.map((item) => {
                 return (
-                  <Tooltip title={item.content} arrow key={item.id}>
+                  <Tooltip title={item?.content} arrow key={item?._id}>
                     <img
                       onPointerMove={(e) => {
                         const hover = hoverRef.current!;
-                        hover.style.width = calLeft(item.moment);
+                        hover.style.width = calLeft(item?.moment);
                       }}
-                      key={item.id}
+                      key={item?._id}
                       src={`http://localhost:8000/images/chill1.png`}
                       alt=""
                       style={{
