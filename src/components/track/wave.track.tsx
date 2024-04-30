@@ -15,6 +15,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { fetchDefaultImages, sendRequest } from "@/utils/api";
 import { useTrackContext } from "@/lib/track.wrapper";
+import CommentTrack from "./comment.track";
 
 interface IProps {
   track: ITrackTop | null;
@@ -324,6 +325,9 @@ const WaveTrack = (props: IProps) => {
             ></div>
           )}
         </div>
+      </div>
+      <div>
+        <CommentTrack comments={comments} track={track} />
       </div>
     </div>
   );

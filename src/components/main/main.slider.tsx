@@ -125,22 +125,22 @@ const MainSlider = (props: IProps) => {
                     gutterBottom
                     component="div"
                     sx={{
-                      height: "40px",
-                      wordWrap: "normal",
-                    }}
-                  >
-                    {track.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
                       maxHeight: "100px",
                       height: "100%",
                       wordWrap: "normal",
                     }}
                   >
                     {track.description}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      height: "40px",
+                      wordWrap: "normal",
+                    }}
+                  >
+                    {track.title}
                   </Typography>
                 </CardContent>
               </Card>

@@ -85,6 +85,6 @@ declare global {
         "__v": number,
         "createdAt": string,
         "updatedAt": string
-    }[]
+    }
 
 }
