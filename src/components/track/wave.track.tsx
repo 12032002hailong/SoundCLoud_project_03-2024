@@ -13,7 +13,7 @@ import { WaveSurferOptions } from "wavesurfer.js";
 import "./wave.scss";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { sendRequest } from "@/utils/api";
+import { fetchDefaultImages, sendRequest } from "@/utils/api";
 import { useTrackContext } from "@/lib/track.wrapper";
 
 interface IProps {
@@ -153,30 +153,6 @@ const WaveTrack = (props: IProps) => {
     fetchData();
   }, [id]);
 
-  const arrComments = [
-    {
-      id: 1,
-      avatar: "http://localhost:8000/images/chill1.png",
-      moment: 10,
-      user: "username 1",
-      content: "just a comment1",
-    },
-    {
-      id: 2,
-      avatar: "http://localhost:8000/images/chill1.png",
-      moment: 30,
-      user: "username 2",
-      content: "just a comment3",
-    },
-    {
-      id: 3,
-      avatar: "http://localhost:8000/images/chill1.png",
-      moment: 50,
-      user: "username 3",
-      content: "just a comment3",
-    },
-  ];
-
   const calLeft = (moment: number) => {
     const hardCodeDuration = 199;
     const percent = (moment / hardCodeDuration) * 100;
@@ -298,7 +274,6 @@ const WaveTrack = (props: IProps) => {
                         hover.style.width = calLeft(item?.moment);
                       }}
                       key={item?._id}
-                      src={`http://localhost:8000/images/chill1.png`}
                       alt=""
                       style={{
                         height: 20,
@@ -308,6 +283,7 @@ const WaveTrack = (props: IProps) => {
                         zIndex: 20,
                         left: calLeft(item.moment),
                       }}
+                      src={fetchDefaultImages(item?.user?.type)}
                     />
                   </Tooltip>
                 );
@@ -325,14 +301,28 @@ const WaveTrack = (props: IProps) => {
             alignItems: "center",
           }}
         >
-          <div
-            style={{
-              background: "#ccc",
-              height: "250px",
-              maxWidth: "250px",
-              width: "100%",
-            }}
-          ></div>
+          {track?.imgUrl ? (
+            <img
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track?.imgUrl}`}
+              alt=""
+              style={{
+                maxWidth: "250px",
+                width: "100%",
+                borderRadius: "4px",
+                border: "1px solid #ddd",
+                padding: "5px",
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                background: "#ccc",
+                height: "250px",
+                maxWidth: "250px",
+                width: "100%",
+              }}
+            ></div>
+          )}
         </div>
       </div>
     </div>

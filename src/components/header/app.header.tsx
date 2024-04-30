@@ -21,6 +21,7 @@ import Container from "@mui/material/Container";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { fetchDefaultImages } from "@/utils/api";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -248,7 +249,17 @@ export default function AppHeader() {
                   <Link href={"/playlist"}>Playlist</Link>
                   <Link href={"/like"}>Likes</Link>
                   <Link href={"/track/upload"}>Upload</Link>
-                  <Avatar onClick={handleProfileMenuOpen}>HL</Avatar>
+                  <img
+                    src={fetchDefaultImages(session.user.type)}
+                    alt=""
+                    onClick={handleProfileMenuOpen}
+                    style={{
+                      height: 35,
+                      width: 35,
+                      cursor: "pointer",
+                    }}
+                  />
+                  {/* <Avatar onClick={handleProfileMenuOpen}>HL</Avatar> */}
                 </>
               ) : (
                 <>

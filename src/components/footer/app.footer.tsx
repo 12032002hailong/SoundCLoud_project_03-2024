@@ -20,7 +20,7 @@ const AppFooter = () => {
       //@ts-ignore
       playerRef?.current?.audio?.current?.play();
     }
-  }, [currentTrack]);
+  }, [currentTrack?.isPlaying]);
 
   if (!hasMounted) return <></>;
   return (
