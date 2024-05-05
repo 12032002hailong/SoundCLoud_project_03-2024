@@ -2,20 +2,58 @@ import * as React from "react";
 import { TextField, Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { fetchDefaultImages } from "@/utils/api";
+import { fetchDefaultImages, sendRequest } from "@/utils/api";
 import dayjs from "dayjs";
+import { useSession } from "next-auth/react";
+import { useHasMounted, useWavesurfer } from "@/utils/customHook";
 
 interface IProps {
   track: ITrackTop | null;
   comments: ITrackComment[];
+  wavesurfer: any;
 }
 
 const CommentTrack = (props: IProps) => {
-  const { track, comments } = props;
-  const [yourComments, setYourComments] = React.useState("");
+  const { track, comments, wavesurfer } = props;
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const hasMounted = useHasMounted();
 
-  const handleSubmit = () => {
-    console.log("hello");
+  const [yourComments, setYourComments] = React.useState("");
+  const { data: session } = useSession();
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secondsRemainder = Math.round(seconds) % 60;
+    const paddedSeconds = `0${secondsRemainder}`.slice(-2);
+
+    return `${minutes} : ${paddedSeconds}`;
+  };
+
+  const handleSubmit = async () => {
+    const res = await sendRequest<IBackendRes<ITrackComment>>({
+      url: `http://localhost:8000/api/v1/comments`,
+      method: "POST",
+      body: {
+        content: yourComments,
+        moment: Math.round(wavesurfer?.getCurrentTime() ?? 0),
+        track: track?._id,
+      },
+      headers: {
+        Authorization: `Bearer ${session?.access_token}`,
+      },
+    });
+
+    if (res.data) {
+      setYourComments("");
+    }
+  };
+
+  const handleJumpTrack = (moment: number) => {
+    if (wavesurfer) {
+      const duration = wavesurfer.getDuration();
+      wavesurfer.seekTo(moment / duration);
+      wavesurfer.play();
+    }
   };
 
   return (
@@ -66,6 +104,7 @@ const CommentTrack = (props: IProps) => {
                     display: "flex",
                     gap: "10px",
                     justifyContent: "space-between",
+                    marginTop: "15px",
                   }}
                 >
                   <Box
@@ -83,13 +122,19 @@ const CommentTrack = (props: IProps) => {
                     />
                     <div>
                       <div style={{ fontSize: "13px" }}>
-                        {comments?.user?.name}
+                        {comments?.user?.name ?? comments?.user?.email} and
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleJumpTrack(comments.moment)}
+                        >
+                          &nbsp; {formatTime(comments.moment)}
+                        </span>
                       </div>
                       <div>{comments.content}</div>
                     </div>
                   </Box>
                   <div style={{ fontSize: "12px", color: "#999" }}>
-                    {dayjs(comments.createdAt).year()}
+                    {hasMounted && dayjs(comments.createdAt).year()}
                   </div>
                 </Box>
               );

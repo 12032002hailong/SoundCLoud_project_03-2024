@@ -16,6 +16,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { fetchDefaultImages, sendRequest } from "@/utils/api";
 import { useTrackContext } from "@/lib/track.wrapper";
 import CommentTrack from "./comment.track";
+import LikeTrack from "./like.track";
 
 interface IProps {
   track: ITrackTop | null;
@@ -327,7 +328,15 @@ const WaveTrack = (props: IProps) => {
         </div>
       </div>
       <div>
-        <CommentTrack comments={comments} track={track} />
+        <LikeTrack track={track} />
+      </div>
+
+      <div>
+        <CommentTrack
+          comments={comments}
+          track={track}
+          wavesurfer={wavesurfer}
+        />
       </div>
     </div>
   );
