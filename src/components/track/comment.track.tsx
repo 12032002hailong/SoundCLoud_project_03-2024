@@ -6,6 +6,7 @@ import { fetchDefaultImages, sendRequest } from "@/utils/api";
 import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
 import { useHasMounted, useWavesurfer } from "@/utils/customHook";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   track: ITrackTop | null;
@@ -20,6 +21,7 @@ const CommentTrack = (props: IProps) => {
 
   const [yourComments, setYourComments] = React.useState("");
   const { data: session } = useSession();
+  const router = useRouter();
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -46,6 +48,8 @@ const CommentTrack = (props: IProps) => {
     if (res.data) {
       setYourComments("");
     }
+    router.refresh();
+
   };
 
   const handleJumpTrack = (moment: number) => {
@@ -55,6 +59,7 @@ const CommentTrack = (props: IProps) => {
       wavesurfer.play();
     }
   };
+
 
   return (
     <>
