@@ -145,7 +145,7 @@ const WaveTrack = (props: IProps) => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await sendRequest<IBackendRes<ITrackTop>>({
-        url: `http://localhost:8000/api/v1/tracks/${id}`,
+        url: `http://localhost:8000/api/v1/tracks/${track?._id}`,
         method: "GET",
       });
       if (res && res.data) {
@@ -153,7 +153,7 @@ const WaveTrack = (props: IProps) => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [track?._id]);
 
   const calLeft = (moment: number) => {
     const hardCodeDuration = 199;
