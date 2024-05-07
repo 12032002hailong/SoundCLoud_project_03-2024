@@ -80,7 +80,6 @@ const Step1 = (props: IProps) => {
           });
         } catch (error) {
           //@ts-ignore
-          console.log(">>>check error", error?.response?.data);
         }
       }
     },

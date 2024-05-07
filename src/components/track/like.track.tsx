@@ -41,7 +41,6 @@ const LikeTrack = (props: IProps) => {
   }, [session]);
 
   const handleLikeTrack = async () => {
-    console.log(">>>check track", track)
     await sendRequest<IBackendRes<IModelPaginate<ITrackLike>>>({
       url: `http://localhost:8000/api/v1/likes`,
       method: "POST",

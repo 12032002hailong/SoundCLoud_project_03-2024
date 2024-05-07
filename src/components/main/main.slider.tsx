@@ -77,7 +77,6 @@ const MainSlider = (props: IProps) => {
     nextArrow: <NextArrow />,
     prevArrow: <PreArrow />,
   };
-  console.log(data);
   return (
     <Box
       sx={{
