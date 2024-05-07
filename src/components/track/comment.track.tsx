@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
 import { useHasMounted, useWavesurfer } from "@/utils/customHook";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface IProps {
   track: ITrackTop | null;
@@ -84,15 +85,15 @@ const CommentTrack = (props: IProps) => {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <img
-              alt=""
-              style={{
-                marginTop: "15px",
-                height: 150,
-                width: 150,
-              }}
+
+            <Image
+              alt="comment track"
               src={fetchDefaultImages(track?.uploader?.type!)}
-            />
+              height={150}
+              width={150}
+            >
+
+            </Image>
             <h5
               style={{
                 marginLeft: "15px",
@@ -121,10 +122,11 @@ const CommentTrack = (props: IProps) => {
                       alignItems: "flex-start",
                     }}
                   >
-                    <img
+                    <Image
                       src={fetchDefaultImages(comments?.user?.type)}
-                      alt=""
-                      style={{ height: 40, width: 40 }}
+                      alt="comment user"
+                      height={40}
+                      width={40}
                     />
                     <div>
                       <div style={{ fontSize: "13px" }}>
