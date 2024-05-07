@@ -11,6 +11,7 @@ const AppFooter = () => {
   const hasMounted = useHasMounted();
   const playerRef = useRef(null);
 
+
   useEffect(() => {
     if (currentTrack?.isPlaying === false) {
       //@ts-ignore

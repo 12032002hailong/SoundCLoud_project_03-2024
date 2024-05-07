@@ -22,6 +22,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { convertSlugUrl } from "@/utils/api";
 
 interface IProps {
   data: ITrackTop[];
@@ -103,7 +104,7 @@ const MainSlider = (props: IProps) => {
                 }}
               >
                 <Link
-                  href={`/track/${track._id}?audio=${track.trackUrl}&id={track._id}`}
+                  href={`/track/${convertSlugUrl(track.title)}-${track._id}.html?audio=${track.trackUrl}`}
                 >
                   <CardMedia
                     sx={{ height: 200 }}

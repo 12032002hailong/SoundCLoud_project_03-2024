@@ -18,6 +18,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import { useTrackContext } from "@/lib/track.wrapper";
 import PauseIcon from "@mui/icons-material/Pause";
 import Link from "next/link";
+import { convertSlugUrl } from "@/utils/api";
 
 const ProfileTracks = (props: any) => {
   const { data } = props;
@@ -56,7 +57,7 @@ const ProfileTracks = (props: any) => {
                   textDecoration: "none",
                   color: "unset",
                 }}
-                href={`/track/${data._id}?audio=${data.trackUrl}&id=${data._id}`}
+                href={`/track/${convertSlugUrl(data.title)}-${data._id}.html?audio=${data.trackUrl}`}
               >
                 <Typography component="div" variant="h5">
                   {data.title}
@@ -82,13 +83,13 @@ const ProfileTracks = (props: any) => {
               {(data._id !== currentTrack._id ||
                 (data._id === currentTrack._id &&
                   currentTrack.isPlaying === false)) && (
-                <IconButton
-                  aria-label="play/pause"
-                  onClick={(e) => setCurrentTrack({ ...data, isPlaying: true })}
-                >
-                  <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                </IconButton>
-              )}
+                  <IconButton
+                    aria-label="play/pause"
+                    onClick={(e) => setCurrentTrack({ ...data, isPlaying: true })}
+                  >
+                    <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+                  </IconButton>
+                )}
 
               {data._id === currentTrack._id &&
                 currentTrack.isPlaying === true && (

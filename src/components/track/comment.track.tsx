@@ -16,6 +16,7 @@ interface IProps {
 
 const CommentTrack = (props: IProps) => {
   const { track, comments, wavesurfer } = props;
+  console.log(">>>check comments", comments);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const hasMounted = useHasMounted();
 
@@ -101,7 +102,7 @@ const CommentTrack = (props: IProps) => {
             </h5>
           </Grid>
           <Grid item xs={8}>
-            {comments.map((comments) => {
+            {comments && comments.map((comments) => {
               return (
                 <Box
                   key={comments._id}
