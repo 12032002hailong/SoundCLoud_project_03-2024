@@ -66,7 +66,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function AppHeader() {
   const { data: session } = useSession();
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -251,7 +250,7 @@ export default function AppHeader() {
                   <Link href={"/like"}>Likes</Link>
                   <Link href={"/track/upload"}>Upload</Link>
                   <Image
-                    src={fetchDefaultImages(session.user.type)}
+                    src={fetchDefaultImages((session?.user?.type).toUpperCase())}
                     alt="avatar"
                     onClick={handleProfileMenuOpen}
                     height={35}

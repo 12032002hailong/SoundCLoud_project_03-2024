@@ -59,7 +59,7 @@ const authOptions: AuthOptions = {
                 if (res.data) {
                     token.access_token = res.data?.access_token;
                     token.refresh_token = res.data?.refresh_token;
-                    token.usr = res.data?.user;
+                    token.user = res.data?.user;
                 }
             }
             if (trigger === 'signIn' && account?.provider === 'credentials') {
