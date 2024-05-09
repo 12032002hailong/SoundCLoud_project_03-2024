@@ -22,6 +22,7 @@
     "next": "^14.3.0-canary.47",
     "next-auth": "^4.24.7",
     "next-nprogress-bar": "2.1.2",
+    "nextjs-progressbar": "^0.0.16",
     "query-string": "8.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

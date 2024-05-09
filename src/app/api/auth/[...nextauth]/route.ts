@@ -25,7 +25,7 @@ const authOptions: AuthOptions = {
             async authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
                 const res = await sendRequest<IBackendRes<JWT>>({
-                    url: 'http://localhost:8000/api/v1/auth/login',
+                    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`,
                     method: 'POST',
                     body: {
                         username: credentials?.username,
@@ -52,7 +52,7 @@ const authOptions: AuthOptions = {
             if (trigger === 'signIn' && account?.provider !== 'credentials') {
                 //todo
                 const res = await sendRequest<IBackendRes<JWT>>({
-                    url: 'http://localhost:8000/api/v1/auth/social-media',
+                    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/social-media`,
                     method: 'POST',
                     body: { type: account?.provider?.toLocaleLowerCase(), username: user.email },
                 })

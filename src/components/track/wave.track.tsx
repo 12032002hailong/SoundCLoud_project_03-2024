@@ -30,7 +30,6 @@ const WaveTrack = (props: IProps) => {
 
   const searchParams = useSearchParams();
   const fileName = searchParams.get("audio");
-  const id = searchParams.get("id");
   const containerRef = useRef<HTMLDivElement>(null);
   const hoverRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState<string>("0:00");
@@ -150,7 +149,7 @@ const WaveTrack = (props: IProps) => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await sendRequest<IBackendRes<ITrackTop>>({
-        url: `http://localhost:8000/api/v1/tracks/${track?._id}`,
+        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/${track?._id}`,
         method: "GET",
       });
       if (res && res.data) {
@@ -183,7 +182,7 @@ const WaveTrack = (props: IProps) => {
   const handleIncreaseView = async () => {
     if (firstViewRef.current) {
       await sendRequest<IBackendRes<IModelPaginate<ITrackLike>>>({
-        url: `http://localhost:8000/api/v1/tracks/increase-view`,
+        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/increase-view`,
         method: "POST",
         body: {
           trackId: track?._id
@@ -194,7 +193,7 @@ const WaveTrack = (props: IProps) => {
     }
   };
 
-
+  console.log("current track", currentTrack)
 
   return (
     <div style={{ marginTop: 20 }}>

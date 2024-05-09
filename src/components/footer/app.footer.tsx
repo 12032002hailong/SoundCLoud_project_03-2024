@@ -23,7 +23,10 @@ const AppFooter = () => {
     }
   }, [currentTrack?.isPlaying]);
 
+
   if (!hasMounted) return <></>;
+
+
   return (
     <>
       {currentTrack._id && (
@@ -62,6 +65,7 @@ const AppFooter = () => {
                   boxShadow: "unset",
                   background: "#f2f2f2",
                 }}
+
                 onPlay={() => {
                   setCurrentTrack({ ...currentTrack, isPlaying: true });
                 }}

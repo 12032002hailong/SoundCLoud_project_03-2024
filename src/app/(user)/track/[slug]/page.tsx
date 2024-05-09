@@ -5,6 +5,8 @@ import { Container } from "@mui/material";
 import { sendRequest } from "@/utils/api";
 import { Metadata, ResolvingMetadata } from 'next'
 import slugify from "slugify";
+import NotFound from "./not-found";
+
 
 type Props = {
   params: { slug: string }
@@ -21,7 +23,7 @@ export async function generateMetadata(
   const id = temp1[temp1.length - 1];
   // fetch data
   const res = await sendRequest<IBackendRes<ITrackTop>>({
-    url: `http://localhost:8000/api/v1/tracks/${id}`,
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/${id}`,
     method: "GET",
     nextOption: { cache: "no-store" },
   });
@@ -40,22 +42,20 @@ export async function generateMetadata(
 
 
 const DetailTrackPage = async (props: any) => {
-  await new Promise(resolve => setTimeout(resolve, 3000))
+  await new Promise(resolve => setTimeout(resolve, 1500))
 
   const { params } = props;
   const temp = params?.slug?.split('.html') ?? [];
   const temp1 = temp[0]?.split('-') ?? [];
   const id = temp1[temp1.length - 1];
   const res = await sendRequest<IBackendRes<ITrackTop>>({
-    url: `http://localhost:8000/api/v1/tracks/${id}`,
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/${id}`,
     method: "GET",
     nextOption: { cache: "no-store" },
   });
 
-
-
   const res1 = await sendRequest<IBackendRes<IModelPaginate<ITrackComment>>>({
-    url: `http://localhost:8000/api/v1/tracks/comments`,
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/comments`,
     method: "POST",
     queryParams: {
       current: 1,
@@ -64,6 +64,10 @@ const DetailTrackPage = async (props: any) => {
       sort: "-createdAt",
     },
   });
+
+  if (!res)
+    NotFound()
+
 
   return (
     <Container>

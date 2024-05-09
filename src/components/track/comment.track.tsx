@@ -17,7 +17,6 @@ interface IProps {
 
 const CommentTrack = (props: IProps) => {
   const { track, comments, wavesurfer } = props;
-  console.log(">>>check comments", comments);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const hasMounted = useHasMounted();
 
@@ -35,7 +34,7 @@ const CommentTrack = (props: IProps) => {
 
   const handleSubmit = async () => {
     const res = await sendRequest<IBackendRes<ITrackComment>>({
-      url: `http://localhost:8000/api/v1/comments`,
+      url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/comments`,
       method: "POST",
       body: {
         content: yourComments,
