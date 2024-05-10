@@ -193,7 +193,6 @@ const WaveTrack = (props: IProps) => {
     }
   };
 
-  console.log("current track", currentTrack)
 
   return (
     <div style={{ marginTop: 20 }}>
